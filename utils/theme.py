@@ -99,21 +99,29 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 
 /* Hide the duplicate min/max labels rendered beneath the slider */
 /* Back-compat selector on older Streamlit builds */
+/* ---------- Slider (compact + white labels) ---------- */
+.stSlider [data-baseweb="slider"]{ height:12px; padding:8px 0; }
+.stSlider [role="slider"]{ box-shadow:none !important; }
+
+/* Hide *all* built-in tiny labels above the track (tickbar, min/max, and thumb value bubbles) */
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
-.stSlider [data-testid="stTickBarMax"] { display:none !important; }
-
-/* Keep the tiny labels but make them effectively invisible on dark bg */
-.stSlider [data-baseweb="slider"] span {
-  color: #000 !important;         /* black text on dark background */
-  text-shadow: none !important;   /* kill any glow that could make them visible */
-  opacity: 1 !important;          /* keep layout stable */
+.stSlider [data-testid="stTickBarMax"],
+/* BaseWeb value/tick elements across versions */
+.stSlider [data-baseweb="slider"] div[class*="Tick"],
+.stSlider [data-baseweb="slider"] div[class*="tick"],
+.stSlider [data-baseweb="slider"] div[class*="Value"],
+.stSlider [data-baseweb="slider"] div[class*="value"],
+.stSlider [data-baseweb="slider"] div[class*="ThumbValue"],
+.stSlider [data-baseweb="slider"] span[class*="Value"]{
+  display:none !important;
 }
 
-/* Still hide the tickbar variants */
-.stSlider [data-testid="stTickBar"],
-.stSlider [data-testid="stTickBarMin"],
-.stSlider [data-testid="stTickBarMax"] { display:none !important; }
+/* If any stray inline spans remain above the track, make them invisible (keeps layout stable) */
+.stSlider [data-baseweb="slider"] > div span{
+  color: transparent !important;
+  text-shadow: none !important;
+}
 
 /* Make the All/None buttons compact while keeping text on one line */
 button[kind="secondary"] { white-space: nowrap; }
