@@ -7,7 +7,7 @@ from utils.auth import require_access_code
 from pathlib import Path
 import re
 from datetime import datetime
-import os  # <-- add this
+import os
 
 from utils.theme import inject_dark_theme, header
 from utils.data import load_all
@@ -32,13 +32,10 @@ from modules.quality import (
     build_quality_table,
     render_quality_section,
 )
-
 from modules.technicals import load_technicals_ready, render_technicals_section
 
 # ---------- Root path fix (run-anywhere) ----------
 # Ensure all relative paths like "data_private/..." resolve relative to this file.
-# On Streamlit Cloud the CWD is typically the repo root; locally you run from screenerApp.
-# This mirrors your local behavior with *no* other code changes.
 _APP_DIR = Path(__file__).resolve().parent
 try:
     os.chdir(_APP_DIR)
@@ -52,7 +49,6 @@ with _auth_box.container():
         st.stop()
 _auth_box.empty()
 
-
 # ---------------------------- Page / Theme ----------------------------
 st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️", layout="wide")
 inject_dark_theme()
@@ -65,15 +61,6 @@ def _mtime(path: str | Path) -> float:
 @st.cache_data(show_spinner=False, ttl=3600)
 def get_all_data_cached():
     return load_all()
-
-if st.sidebar.checkbox("🔎 Data diagnostics", False):
-    from glob import glob
-    st.write("CWD:", Path.cwd())
-    st.write("data_private exists:", Path("data_private").exists())
-    st.write("Parquet files in data_private:", sorted([Path(p).name for p in glob("data_private/*.parquet")]))
-    for key in ("companyData", "marketCapGBP"):
-        df = data.get(key)
-        st.write(f"{key}:", "None" if df is None else (df.shape if not df.empty else "EMPTY"))
 
 @st.cache_data(show_spinner=False, ttl=3600)
 def get_ready_cached(path: str, kind: str):
@@ -388,15 +375,12 @@ company_df   = data.get("companyData", pd.DataFrame())
 mktcap_gbp_w = data.get("marketCapGBP", pd.DataFrame())
 
 # --- optional diagnostics (safe) ---
-from pathlib import Path
 from glob import glob
-
-if st.sidebar.checkbox("🔎 Data diagnostics", False):
+if st.sidebar.checkbox("🔎 Data diagnostics", False, key="diag_toggle"):
     st.write("CWD:", Path.cwd())
     st.write("data_private exists:", Path("data_private").exists())
     st.write("Parquet files in data_private:",
              sorted([Path(p).name for p in glob("data_private/*.parquet")]))
-
     st.write("companyData:", "EMPTY" if company_df is None or company_df.empty else company_df.shape)
     st.write("marketCapGBP:", "EMPTY" if mktcap_gbp_w is None or mktcap_gbp_w.empty else mktcap_gbp_w.shape)
 
@@ -825,6 +809,7 @@ if active_section == "Quality":
         export_buttons_fn=export_buttons,
         key_prefix="qlt_",
     )
+
 # ---------------------------- Technicals ----------------------------
 # ---------------------------- Technicals ----------------------------
 if active_section == "Technicals":
