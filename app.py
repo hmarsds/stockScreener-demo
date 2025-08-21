@@ -49,12 +49,19 @@ inject_dark_theme()
 
 # It restores any slider wrappers your dark.css might hide, and hides ONLY the tiny labels above.
 st.markdown("""
-<style id="slider-fix">
-/* Make sure inner slider wrappers are visible (overrides any 'display:none' in dark.css) */
+<style id="slider-visibility-fix">
+/* Make sure the internal slider wrappers are visible */
 .stSlider [data-baseweb="slider"] > div { display:block !important; }
 .stSlider [data-baseweb="slider"] + div { display:block !important; }
 
-/* Hide ONLY Streamlit's small tick labels above the track */
+/* Compact track + visible handle (harmless styling) */
+.stSlider [data-baseweb="slider"]{ height:12px !important; padding:8px 0 !important; }
+.stSlider [role="slider"]{
+  width:18px !important; height:18px !important;
+  background:#ffffff !important; border:2px solid #22c55e !important; box-shadow:none !important;
+}
+
+/* Hide ONLY the tiny labels above the slider track */
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"] { display:none !important; }
@@ -207,7 +214,6 @@ def load_close_gbp_map_for_date(path: str | Path, date_str: str = "2025-08-18") 
 
 # ---- Sliders (log-warped) ----
 def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
-    """Close Price (GBP) slider, log warped 0..vmax; shows values BELOW."""
     if not vmax or vmax <= 0:
         st.caption("Close Price (GBP) — no data available")
         st.session_state[key] = (None, None)
@@ -223,10 +229,8 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
         value=(0.0, 1.0), step=0.001,
         key=key + "__t", label_visibility="collapsed"
     )
-
     vlo, vhi = from_t(t_lo), from_t(t_hi)
     st.session_state[key] = (vlo, vhi)
-
     st.markdown(
         '<div style="display:flex;justify-content:space-between;'
         'margin-top:.35rem;font-weight:700;color:#ffffff;">'
@@ -235,9 +239,7 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
     )
     return vlo, vhi
 
-
 def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
-    """Market Cap (GBP) range, log-warped; shows values BELOW."""
     s = pd.to_numeric(values, errors="coerce").dropna()
     if s.empty or float(s.max()) <= 0:
         st.caption("Market Cap (GBP) — no data available")
@@ -255,10 +257,8 @@ def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
         value=(0.0, 1.0), step=0.001,
         key=key + "__t", label_visibility="collapsed"
     )
-
     lo_abs, hi_abs = from_t(t_lo), from_t(t_hi)
     st.session_state["flt_mc_abs"] = (lo_abs, hi_abs)
-
     st.markdown(
         f'<div style="display:flex;justify-content:space-between;'
         f'margin-top:.35rem;font-weight:700;color:#ffffff;">'
