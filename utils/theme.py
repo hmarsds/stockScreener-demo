@@ -61,7 +61,6 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 /* ---------- Slider (compact + white labels) ---------- */
 .stSlider [data-baseweb="slider"]{ height:12px; }
 .stSlider [role="slider"]{ box-shadow:none !important; }
-.stSlider, .stSlider * { color:#f9fafb !important; }
 
 /* Hide ONLY the small tick/min/max labels above the slider track */
 .stSlider [data-testid="stTickBar"],
