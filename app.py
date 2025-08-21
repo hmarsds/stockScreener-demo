@@ -209,7 +209,9 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
     t_lo, t_hi = st.slider(
         "", min_value=0.0, max_value=1.0,
         value=(0.0, 1.0), step=0.001,
-        key=key + "__t", label_visibility="collapsed"
+        key=key + "__t",
+        label_visibility="collapsed",
+        format=" "  # <--- makes built-in value text blank
     )
     vlo, vhi = from_t(t_lo), from_t(t_hi)
     st.session_state[key] = (vlo, vhi)
@@ -237,7 +239,9 @@ def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
     t_lo, t_hi = st.slider(
         "", min_value=0.0, max_value=1.0,
         value=(0.0, 1.0), step=0.001,
-        key=key + "__t", label_visibility="collapsed"
+        key=key + "__t",
+        label_visibility="collapsed",
+        format=" "  # <--- makes built-in value text blank
     )
     lo_abs, hi_abs = from_t(t_lo), from_t(t_hi)
     st.session_state["flt_mc_abs"] = (lo_abs, hi_abs)
