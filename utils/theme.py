@@ -103,15 +103,17 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"] { display:none !important; }
 
-/* Hide any tiny value text above the slider track */
+/* Keep the tiny labels but make them effectively invisible on dark bg */
+.stSlider [data-baseweb="slider"] span {
+  color: #000 !important;         /* black text on dark background */
+  text-shadow: none !important;   /* kill any glow that could make them visible */
+  opacity: 1 !important;          /* keep layout stable */
+}
+
+/* Still hide the tickbar variants */
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"] { display:none !important; }
-
-/* In some Streamlit/BaseWeb versions, extra spans are used for values — hide those too */
-.stSlider [data-baseweb="slider"] span { 
-  display: none !important;
-}
 
 /* Make the All/None buttons compact while keeping text on one line */
 button[kind="secondary"] { white-space: nowrap; }
