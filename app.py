@@ -53,20 +53,28 @@ _auth_box.empty()
 st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️", layout="wide")
 inject_dark_theme()
 
+# --- Force slider visibility on all Streamlit builds (override theme CSS) ---
 st.markdown("""
-<style>
-/* Make slider track/handles visible regardless of theme CSS */
-[data-testid="stSlider"] [data-baseweb="slider"]{height:8px!important;padding:6px 0!important;}
-[data-testid="stSlider"] [data-baseweb="slider"]>div:nth-child(1),
-[data-testid="stSlider"] [data-baseweb="slider"]>div:nth-child(3){background:rgba(148,163,184,.35)!important;}
-[data-testid="stSlider"] [data-baseweb="slider"]>div:nth-child(2){background:rgba(34,197,94,.95)!important;}
-[data-testid="stSlider"] [role="slider"]{display:block!important;opacity:1!important;background:#fff!important;border:2px solid rgba(34,197,94,1)!important;box-shadow:none!important;}
+<style id="unhide-sliders">
+/* Unhide any pieces that may have been set to display:none by theme rules */
+.stSlider [data-baseweb="slider"] > div:last-child,
+.stSlider [data-baseweb="slider"] + div,
+[data-testid="stSlider"] [data-baseweb="slider"] > div:last-child,
+[data-testid="stSlider"] [data-baseweb="slider"] + div {
+  display: block !important;
+}
+/* Make sure the track and handles actually have height and are visible */
+[data-testid="stSlider"] [data-baseweb="slider"]{height:12px!important;padding:8px 0!important;}
+[data-testid="stSlider"] [role="slider"]{
+  display:block!important;width:18px!important;height:18px!important;
+  box-shadow:none!important;background:#fff!important;border:2px solid #22c55e!important;
+}
+/* Safety: never hide the tick bar rows */
+[data-testid="stSlider"] [data-testid="stTickBar"],
+[data-testid="stSlider"] [data-testid="stTickBarMin"],
+[data-testid="stSlider"] [data-testid="stTickBarMax"]{display:block!important;}
 </style>
 """, unsafe_allow_html=True)
-
-# 🧪 Always-on debug control in the sidebar
-st.sidebar.markdown("### Debug")
-st.sidebar.slider("🔬 DEBUG slider", 0, 10, (0, 10), key="dbg_sl")
 
 # ============================ Cache helpers ============================
 def _mtime(path: str | Path) -> float:
