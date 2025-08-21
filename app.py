@@ -47,6 +47,21 @@ except Exception:
 st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️", layout="wide")
 inject_dark_theme()
 
+# It restores any slider wrappers your dark.css might hide, and hides ONLY the tiny labels above.
+st.markdown("""
+<style id="slider-fix">
+/* Make sure inner slider wrappers are visible (overrides any 'display:none' in dark.css) */
+.stSlider [data-baseweb="slider"] > div { display:block !important; }
+.stSlider [data-baseweb="slider"] + div { display:block !important; }
+
+/* Hide ONLY Streamlit's small tick labels above the track */
+.stSlider [data-testid="stTickBar"],
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"] { display:none !important; }
+</style>
+""", unsafe_allow_html=True)
+
+
 # ---------- Auth Gate ----------
 _auth_box = st.empty()
 with _auth_box.container():
