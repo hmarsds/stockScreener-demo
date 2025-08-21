@@ -53,6 +53,25 @@ _auth_box.empty()
 st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️", layout="wide")
 inject_dark_theme()
 
+st.markdown("""
+<style>
+/* Make sliders clearly visible across Streamlit/BaseWeb versions */
+[data-testid="stSlider"] [data-baseweb="slider"] { height: 6px; }
+[data-testid="stSlider"] [data-baseweb="slider"] > div:nth-child(1),
+[data-testid="stSlider"] [data-baseweb="slider"] > div:nth-child(3) {
+  background: rgba(148,163,184,.35) !important;  /* inactive ranges */
+}
+[data-testid="stSlider"] [data-baseweb="slider"] > div:nth-child(2) {
+  background: rgba(34,197,94,.95) !important;    /* active range */
+}
+[data-testid="stSlider"] [role="slider"] {
+  box-shadow: none !important;
+  border: 2px solid rgba(34,197,94,1) !important;
+  background: #ffffff !important;                /* handles */
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ============================ Cache helpers ============================
 def _mtime(path: str | Path) -> float:
     p = Path(path)
@@ -167,30 +186,22 @@ def load_close_gbp_map_for_date(path: str | Path, date_str: str = "2025-08-18") 
 
 # ---- Sliders (log-warped) ----
 def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
-    """Close Price (GBP) slider, log warped 0..vmax, labels below."""
     if not vmax or vmax <= 0:
         st.caption("Close Price (GBP) — no data available")
         st.session_state[key] = (None, None)
         return (None, None)
 
     lmin, lmax = 0.0, np.log10(vmax + 1.0)
-
     def from_t(t: float) -> float:
         return max(0.0, 10 ** (lmin + t * (lmax - lmin)) - 1.0)
 
-    # plain slider (no CSS wrappers)
     t_lo, t_hi = st.slider(
-        "Close Price (GBP)",
-        min_value=0.0,
-        max_value=1.0,
-        value=(0.0, 1.0),
-        step=0.001,
-        key=key + "__t",
+        "Close Price (GBP)", min_value=0.0, max_value=1.0,
+        value=(0.0, 1.0), step=0.001, key=key + "__t",
+        label_visibility="visible"
     )
-
     vlo, vhi = from_t(t_lo), from_t(t_hi)
     st.session_state[key] = (vlo, vhi)
-
     st.markdown(
         '<div style="display:flex;justify-content:space-between;'
         'margin-top:.35rem;font-weight:700;color:#ffffff;">'
@@ -201,7 +212,6 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
 
 
 def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
-    """Log-warped dual slider in billions with labels below."""
     s = pd.to_numeric(values, errors="coerce").dropna()
     if s.empty or float(s.max()) <= 0:
         st.caption("Market Cap (GBP) — no data available")
@@ -210,23 +220,16 @@ def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
 
     vmax = float(s.max())
     lmin, lmax = 0.0, np.log10(vmax + 1.0)
-
     def from_t(t: float) -> float:
         return max(0.0, 10 ** (lmin + t * (lmax - lmin)) - 1.0)
 
-    # plain slider (no CSS wrappers)
     t_lo, t_hi = st.slider(
-        "Market Cap (GBP)",
-        min_value=0.0,
-        max_value=1.0,
-        value=(0.0, 1.0),
-        step=0.001,
-        key=key + "__t",
+        "Market Cap (GBP)", min_value=0.0, max_value=1.0,
+        value=(0.0, 1.0), step=0.001, key=key + "__t",
+        label_visibility="visible"
     )
-
     lo_abs, hi_abs = from_t(t_lo), from_t(t_hi)
     st.session_state["flt_mc_abs"] = (lo_abs, hi_abs)
-
     st.markdown(
         f'<div style="display:flex;justify-content:space-between;'
         f'margin-top:.35rem;font-weight:700;color:#ffffff;">'
