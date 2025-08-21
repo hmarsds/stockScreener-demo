@@ -59,14 +59,8 @@ div[data-testid="stDataFrame"] th,
 div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:#1f2937 !important; }
 
 /* ---------- Slider (compact + white labels) ---------- */
-.stSlider [data-baseweb="slider"]{ height:12px; }
-.stSlider [role="slider"]{ box-shadow:none !important; }
-.stSlider, .stSlider * { color:#f9fafb !important; }
 
 /* Hide ONLY the small tick/min/max labels above the slider track */
-.stSlider [data-testid="stTickBar"],
-.stSlider [data-testid="stTickBarMin"],
-.stSlider [data-testid="stTickBarMax"] { display:none !important; }
 
 /* Extra label under MC slider */
 .mc-label{ margin-top:.35rem; font-size:.85rem; color:#f9fafb; }
