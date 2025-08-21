@@ -56,18 +56,25 @@ _auth_box.empty()
 
 
 # --- Slider visibility + hide min/max labels ---
+# --- Sliders: restore wrappers (if theme hid them) + hide tiny 0/1 labels ---
 st.markdown("""
-<style id="slider-fix">
-/* keep track/handles visible */
-[data-testid="stSlider"] [data-baseweb="slider"]{height:12px!important;padding:8px 0!important;}
-[data-testid="stSlider"] [role="slider"]{
-  display:block!important;width:18px!important;height:18px!important;
-  background:#fff!important;border:2px solid #22c55e!important;box-shadow:none!important;
+<style id="slider-restore">
+/* 1) Make sure the slider and its inner wrappers are visible */
+.stSlider [data-baseweb="slider"] > div { display:block !important; }
+.stSlider [data-baseweb="slider"] + div { display:block !important; } /* some builds put tickbar here */
+[data-testid="stSlider"]{ min-height:46px !important; }
+
+/* 2) Compact look */
+.stSlider [data-baseweb="slider"]{ height:12px !important; padding:8px 0 !important; }
+.stSlider [role="slider"]{
+  width:18px !important; height:18px !important;
+  background:#ffffff !important; border:2px solid #22c55e !important; box-shadow:none !important;
 }
-/* HIDE the small 0.00 / 1.00 values above the slider */
-[data-testid="stSlider"] [data-testid="stTickBar"],
-[data-testid="stSlider"] [data-testid="stTickBarMin"],
-[data-testid="stSlider"] [data-testid="stTickBarMax"]{display:none!important;}
+
+/* 3) Hide the tiny min/max/marks above the track (keep our custom values below) */
+.stSlider [data-testid="stTickBar"],
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"]{ display:none !important; }
 </style>
 """, unsafe_allow_html=True)
 
