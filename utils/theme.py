@@ -61,6 +61,7 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 /* ---------- Slider (compact + white labels) ---------- */
 .stSlider [data-baseweb="slider"]{ height:12px; }
 .stSlider [role="slider"]{ box-shadow:none !important; }
+.stSlider, .stSlider * { color:#f9fafb !important; }
 
 /* Hide ONLY the small tick/min/max labels above the slider track */
 .stSlider [data-testid="stTickBar"],
@@ -112,7 +113,6 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 button[kind="secondary"] { white-space: nowrap; }
 
 /* Make widget labels (e.g., Sector / Industry / Country) pure white */
-.stSlider label,
 .stMultiSelect label,
 .stTextInput label,
 .stSelectbox label,
@@ -120,9 +120,6 @@ button[kind="secondary"] { white-space: nowrap; }
 [data-testid="stWidgetLabel"] > div { color:#ffffff !important; }
 
 /* Hide the duplicate min/max tickbar UNDER the slider (keep only the values above) */
-.stSlider [data-testid="stTickBar"],
-.stSlider [data-testid="stTickBarMin"],
-.stSlider [data-testid="stTickBarMax"] { display:none !important; }
 
 /* Global: active Streamlit button (used by our pills & tabs via type="primary") */
 .stButton > button[kind="primary"],
