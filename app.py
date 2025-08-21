@@ -56,22 +56,22 @@ _auth_box.empty()
 
 
 # --- Slider visibility + hide min/max labels ---
-# --- Sliders: restore wrappers (if theme hid them) + hide tiny 0/1 labels ---
+# --- Sliders: restore wrappers; hide tiny 0/1 labels above ---
 st.markdown("""
 <style id="slider-restore">
-/* 1) Make sure the slider and its inner wrappers are visible */
+/* Make sure inner wrappers are visible on all Streamlit versions */
 .stSlider [data-baseweb="slider"] > div { display:block !important; }
-.stSlider [data-baseweb="slider"] + div { display:block !important; } /* some builds put tickbar here */
+.stSlider [data-baseweb="slider"] + div { display:block !important; }
 [data-testid="stSlider"]{ min-height:46px !important; }
 
-/* 2) Compact look */
+/* Compact look + visible handle */
 .stSlider [data-baseweb="slider"]{ height:12px !important; padding:8px 0 !important; }
 .stSlider [role="slider"]{
   width:18px !important; height:18px !important;
   background:#ffffff !important; border:2px solid #22c55e !important; box-shadow:none !important;
 }
 
-/* 3) Hide the tiny min/max/marks above the track (keep our custom values below) */
+/* Hide the tiny min/max/ticks above the track */
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"]{ display:none !important; }
