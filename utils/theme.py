@@ -103,6 +103,16 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"] { display:none !important; }
 
+/* Hide any tiny value text above the slider track */
+.stSlider [data-testid="stTickBar"],
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"] { display:none !important; }
+
+/* In some Streamlit/BaseWeb versions, extra spans are used for values — hide those too */
+.stSlider [data-baseweb="slider"] span { 
+  display: none !important;
+}
+
 /* Make the All/None buttons compact while keeping text on one line */
 button[kind="secondary"] { white-space: nowrap; }
 
