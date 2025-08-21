@@ -62,7 +62,8 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 .stSlider [data-baseweb="slider"]{ height:12px; }
 .stSlider [role="slider"]{ box-shadow:none !important; }
 .stSlider, .stSlider * { color:#f9fafb !important; }
-/* Hide the tick/labels row under the slider – keep only the values above */
+
+/* Hide ONLY the small tick/min/max labels above the slider track */
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"] { display:none !important; }
