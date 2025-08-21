@@ -190,6 +190,7 @@ def load_close_gbp_map_for_date(path: str | Path, date_str: str = "2025-08-18") 
 
 # ---- Sliders (log-warped) ----
 def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
+    """Close Price (GBP) slider, log warped 0..vmax, with ONLY our values shown below."""
     if not vmax or vmax <= 0:
         st.caption("Close Price (GBP) — no data available")
         st.session_state[key] = (None, None)
@@ -199,13 +200,20 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
     def from_t(t: float) -> float:
         return max(0.0, 10 ** (lmin + t * (lmax - lmin)) - 1.0)
 
+    # Render our own label so we can collapse the slider label (hides Streamlit's value text)
+    st.markdown("**Close Price (GBP)**")
     t_lo, t_hi = st.slider(
-        "Close Price (GBP)", min_value=0.0, max_value=1.0,
-        value=(0.0, 1.0), step=0.001, key=key + "__t",
-        label_visibility="visible"
+        "",  # empty label
+        min_value=0.0, max_value=1.0,
+        value=(0.0, 1.0), step=0.001,
+        key=key + "__t",
+        label_visibility="collapsed",  # <-- hides the built-in label + value text
     )
+
     vlo, vhi = from_t(t_lo), from_t(t_hi)
     st.session_state[key] = (vlo, vhi)
+
+    # Our values BELOW the slider
     st.markdown(
         '<div style="display:flex;justify-content:space-between;'
         'margin-top:.35rem;font-weight:700;color:#ffffff;">'
@@ -216,6 +224,7 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
 
 
 def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
+    """Market Cap (GBP) range, log-warped; hides built-in value text above."""
     s = pd.to_numeric(values, errors="coerce").dropna()
     if s.empty or float(s.max()) <= 0:
         st.caption("Market Cap (GBP) — no data available")
@@ -227,13 +236,18 @@ def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
     def from_t(t: float) -> float:
         return max(0.0, 10 ** (lmin + t * (lmax - lmin)) - 1.0)
 
+    st.markdown("**Market Cap (GBP)**")
     t_lo, t_hi = st.slider(
-        "Market Cap (GBP)", min_value=0.0, max_value=1.0,
-        value=(0.0, 1.0), step=0.001, key=key + "__t",
-        label_visibility="visible"
+        "",  # empty label
+        min_value=0.0, max_value=1.0,
+        value=(0.0, 1.0), step=0.001,
+        key=key + "__t",
+        label_visibility="collapsed",  # <-- key line
     )
+
     lo_abs, hi_abs = from_t(t_lo), from_t(t_hi)
     st.session_state["flt_mc_abs"] = (lo_abs, hi_abs)
+
     st.markdown(
         f'<div style="display:flex;justify-content:space-between;'
         f'margin-top:.35rem;font-weight:700;color:#ffffff;">'
