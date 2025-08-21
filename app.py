@@ -55,22 +55,18 @@ inject_dark_theme()
 
 st.markdown("""
 <style>
-/* Make sliders clearly visible across Streamlit/BaseWeb versions */
-[data-testid="stSlider"] [data-baseweb="slider"] { height: 6px; }
-[data-testid="stSlider"] [data-baseweb="slider"] > div:nth-child(1),
-[data-testid="stSlider"] [data-baseweb="slider"] > div:nth-child(3) {
-  background: rgba(148,163,184,.35) !important;  /* inactive ranges */
-}
-[data-testid="stSlider"] [data-baseweb="slider"] > div:nth-child(2) {
-  background: rgba(34,197,94,.95) !important;    /* active range */
-}
-[data-testid="stSlider"] [role="slider"] {
-  box-shadow: none !important;
-  border: 2px solid rgba(34,197,94,1) !important;
-  background: #ffffff !important;                /* handles */
-}
+/* Make slider track/handles visible regardless of theme CSS */
+[data-testid="stSlider"] [data-baseweb="slider"]{height:8px!important;padding:6px 0!important;}
+[data-testid="stSlider"] [data-baseweb="slider"]>div:nth-child(1),
+[data-testid="stSlider"] [data-baseweb="slider"]>div:nth-child(3){background:rgba(148,163,184,.35)!important;}
+[data-testid="stSlider"] [data-baseweb="slider"]>div:nth-child(2){background:rgba(34,197,94,.95)!important;}
+[data-testid="stSlider"] [role="slider"]{display:block!important;opacity:1!important;background:#fff!important;border:2px solid rgba(34,197,94,1)!important;box-shadow:none!important;}
 </style>
 """, unsafe_allow_html=True)
+
+# 🧪 Always-on debug control in the sidebar
+st.sidebar.markdown("### Debug")
+st.sidebar.slider("🔬 DEBUG slider", 0, 10, (0, 10), key="dbg_sl")
 
 # ============================ Cache helpers ============================
 def _mtime(path: str | Path) -> float:
