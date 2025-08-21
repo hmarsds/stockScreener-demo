@@ -167,24 +167,26 @@ def load_close_gbp_map_for_date(path: str | Path, date_str: str = "2025-08-18") 
 
 # ---- Sliders (log-warped) ----
 def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
-    """Close Price (GBP) slider, log warped 0..vmax, magenta track, labels below."""
+    """Close Price (GBP) slider, log warped 0..vmax, labels below."""
     if not vmax or vmax <= 0:
         st.caption("Close Price (GBP) — no data available")
         st.session_state[key] = (None, None)
         return (None, None)
 
     lmin, lmax = 0.0, np.log10(vmax + 1.0)
+
     def from_t(t: float) -> float:
         return max(0.0, 10 ** (lmin + t * (lmax - lmin)) - 1.0)
 
-    st.markdown('<div id="price-slider-wrap">', unsafe_allow_html=True)
+    # plain slider (no CSS wrappers)
     t_lo, t_hi = st.slider(
         "Close Price (GBP)",
-        min_value=0.0, max_value=1.0,
-        value=(0.0, 1.0), step=0.001,
-        key=key + "__t", format=""
+        min_value=0.0,
+        max_value=1.0,
+        value=(0.0, 1.0),
+        step=0.001,
+        key=key + "__t",
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
     vlo, vhi = from_t(t_lo), from_t(t_hi)
     st.session_state[key] = (vlo, vhi)
@@ -195,29 +197,11 @@ def price_slider_gbp_log(vmax: float, key="flt_price_abs"):
         f'<span>{vlo:.2f}</span><span>{vhi:.2f}</span></div>',
         unsafe_allow_html=True,
     )
-
-    # Magenta track + aligned padding
-    st.markdown("""
-      <style>
-        #price-slider-wrap [data-testid="stSlider"]{padding-top:0;}
-        #price-slider-wrap [data-baseweb="slider"]>div:nth-child(1),
-        #price-slider-wrap [data-baseweb="slider"]>div:nth-child(3){
-            background-color: rgba(217,70,239,.22) !important;
-        }
-        #price-slider-wrap [data-baseweb="slider"]>div:nth-child(2){
-            background-color: #d946ef !important;
-        }
-        #price-slider-wrap [role="slider"]{
-            background-color:#e879f9 !important;
-            border:2px solid #f0abfc !important;
-            box-shadow:none !important;
-        }
-      </style>
-    """, unsafe_allow_html=True)
     return vlo, vhi
 
+
 def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
-    """Log-warped dual slider in billions with labels below (red track)."""
+    """Log-warped dual slider in billions with labels below."""
     s = pd.to_numeric(values, errors="coerce").dropna()
     if s.empty or float(s.max()) <= 0:
         st.caption("Market Cap (GBP) — no data available")
@@ -226,17 +210,19 @@ def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
 
     vmax = float(s.max())
     lmin, lmax = 0.0, np.log10(vmax + 1.0)
+
     def from_t(t: float) -> float:
         return max(0.0, 10 ** (lmin + t * (lmax - lmin)) - 1.0)
 
-    st.markdown('<div id="mc-slider-wrap">', unsafe_allow_html=True)
+    # plain slider (no CSS wrappers)
     t_lo, t_hi = st.slider(
         "Market Cap (GBP)",
-        min_value=0.0, max_value=1.0,
-        value=(0.0, 1.0), step=0.001,
-        key=key + "__t", format=""
+        min_value=0.0,
+        max_value=1.0,
+        value=(0.0, 1.0),
+        step=0.001,
+        key=key + "__t",
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
     lo_abs, hi_abs = from_t(t_lo), from_t(t_hi)
     st.session_state["flt_mc_abs"] = (lo_abs, hi_abs)
@@ -247,8 +233,6 @@ def mc_slider_billions(values: pd.Series, key="flt_mc_b_range"):
         f'<span>{humanize_mc(lo_abs)}</span><span>{humanize_mc(hi_abs)}</span></div>',
         unsafe_allow_html=True,
     )
-    # align vertical padding with price slider
-    st.markdown("<style>#mc-slider-wrap [data-testid='stSlider']{padding-top:0;}</style>", unsafe_allow_html=True)
     return lo_abs, hi_abs
 
 # ---------- UI helpers ----------
