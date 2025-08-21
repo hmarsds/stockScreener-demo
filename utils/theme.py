@@ -103,7 +103,6 @@ div[data-testid="stDataFrame"] td { background:#0f172a !important; border-color:
 
 
 /* Hide the duplicate min/max labels rendered beneath the slider */
-.stSlider [data-baseweb="slider"] > div:last-child { display:none !important; }
 /* Back-compat selector on older Streamlit builds */
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
@@ -121,7 +120,6 @@ button[kind="secondary"] { white-space: nowrap; }
 [data-testid="stWidgetLabel"] > div { color:#ffffff !important; }
 
 /* Hide the duplicate min/max tickbar UNDER the slider (keep only the values above) */
-.stSlider [data-baseweb="slider"] + div { display:none !important; }
 .stSlider [data-testid="stTickBar"],
 .stSlider [data-testid="stTickBarMin"],
 .stSlider [data-testid="stTickBarMax"] { display:none !important; }
