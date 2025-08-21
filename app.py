@@ -48,25 +48,7 @@ st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️"
 inject_dark_theme()
 
 # It restores any slider wrappers your dark.css might hide, and hides ONLY the tiny labels above.
-st.markdown("""
-<style id="slider-visibility-fix">
-/* Make sure the internal slider wrappers are visible */
-.stSlider [data-baseweb="slider"] > div { display:block !important; }
-.stSlider [data-baseweb="slider"] + div { display:block !important; }
 
-/* Compact track + visible handle (harmless styling) */
-.stSlider [data-baseweb="slider"]{ height:12px !important; padding:8px 0 !important; }
-.stSlider [role="slider"]{
-  width:18px !important; height:18px !important;
-  background:#ffffff !important; border:2px solid #22c55e !important; box-shadow:none !important;
-}
-
-/* Hide ONLY the tiny labels above the slider track */
-.stSlider [data-testid="stTickBar"],
-.stSlider [data-testid="stTickBarMin"],
-.stSlider [data-testid="stTickBarMax"] { display:none !important; }
-</style>
-""", unsafe_allow_html=True)
 
 
 # ---------- Auth Gate ----------
