@@ -66,6 +66,15 @@ def _mtime(path: str | Path) -> float:
 def get_all_data_cached():
     return load_all()
 
+if st.sidebar.checkbox("🔎 Data diagnostics", False):
+    from glob import glob
+    st.write("CWD:", Path.cwd())
+    st.write("data_private exists:", Path("data_private").exists())
+    st.write("Parquet files in data_private:", sorted([Path(p).name for p in glob("data_private/*.parquet")]))
+    for key in ("companyData", "marketCapGBP"):
+        df = data.get(key)
+        st.write(f"{key}:", "None" if df is None else (df.shape if not df.empty else "EMPTY"))
+
 @st.cache_data(show_spinner=False, ttl=3600)
 def get_ready_cached(path: str, kind: str):
     """Cache wrapper around the ready loaders (invalidates when file mtime changes)."""
