@@ -42,6 +42,11 @@ try:
 except Exception:
     pass
 
+
+# ---------------------------- Page / Theme ----------------------------
+st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️", layout="wide")
+inject_dark_theme()
+
 # ---------- Auth Gate ----------
 _auth_box = st.empty()
 with _auth_box.container():
@@ -49,30 +54,20 @@ with _auth_box.container():
         st.stop()
 _auth_box.empty()
 
-# ---------------------------- Page / Theme ----------------------------
-st.set_page_config(page_title="L/S Stock Screener", page_icon="🕵️‍♂️", layout="wide")
-inject_dark_theme()
 
-# --- Force slider visibility on all Streamlit builds (override theme CSS) ---
+# --- Slider visibility + hide min/max labels ---
 st.markdown("""
-<style id="unhide-sliders">
-/* Unhide any pieces that may have been set to display:none by theme rules */
-.stSlider [data-baseweb="slider"] > div:last-child,
-.stSlider [data-baseweb="slider"] + div,
-[data-testid="stSlider"] [data-baseweb="slider"] > div:last-child,
-[data-testid="stSlider"] [data-baseweb="slider"] + div {
-  display: block !important;
-}
-/* Make sure the track and handles actually have height and are visible */
+<style id="slider-fix">
+/* keep track/handles visible */
 [data-testid="stSlider"] [data-baseweb="slider"]{height:12px!important;padding:8px 0!important;}
 [data-testid="stSlider"] [role="slider"]{
   display:block!important;width:18px!important;height:18px!important;
-  box-shadow:none!important;background:#fff!important;border:2px solid #22c55e!important;
+  background:#fff!important;border:2px solid #22c55e!important;box-shadow:none!important;
 }
-/* Safety: never hide the tick bar rows */
+/* HIDE the small 0.00 / 1.00 values above the slider */
 [data-testid="stSlider"] [data-testid="stTickBar"],
 [data-testid="stSlider"] [data-testid="stTickBarMin"],
-[data-testid="stSlider"] [data-testid="stTickBarMax"]{display:block!important;}
+[data-testid="stSlider"] [data-testid="stTickBarMax"]{display:none!important;}
 </style>
 """, unsafe_allow_html=True)
 
