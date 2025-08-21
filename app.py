@@ -387,6 +387,19 @@ data = get_all_data_cached()
 company_df   = data.get("companyData", pd.DataFrame())
 mktcap_gbp_w = data.get("marketCapGBP", pd.DataFrame())
 
+# --- optional diagnostics (safe) ---
+from pathlib import Path
+from glob import glob
+
+if st.sidebar.checkbox("🔎 Data diagnostics", False):
+    st.write("CWD:", Path.cwd())
+    st.write("data_private exists:", Path("data_private").exists())
+    st.write("Parquet files in data_private:",
+             sorted([Path(p).name for p in glob("data_private/*.parquet")]))
+
+    st.write("companyData:", "EMPTY" if company_df is None or company_df.empty else company_df.shape)
+    st.write("marketCapGBP:", "EMPTY" if mktcap_gbp_w is None or mktcap_gbp_w.empty else mktcap_gbp_w.shape)
+
 header("", "Stock Screener", "")
 
 def build_universe(company_df: pd.DataFrame, mcap_gbp_wide: pd.DataFrame | None) -> pd.DataFrame:
